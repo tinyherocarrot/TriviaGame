@@ -11,6 +11,9 @@
 
     <!-- Link to Bootstrap-->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+	
+	<!-- Link to Google Font -->
+	<link href="https://fonts.googleapis.com/css?family=Nunito:400,800" rel="stylesheet">
 
 </head>
 <body>
@@ -18,8 +21,9 @@
 	<!-- THEME: Andrew's Life? Consent? -->
 	<div class="jumbotron">
 		<div class="container">
-			<h1>Truly Tricky Trivia </h1>
-		</div>
+			<h1 id="page-title">Truly Tricky Trivia </h1>
+<!-- 			<div id="countdown-div"></div>
+ -->		</div>
 	</div>
 	<div class="row">
 		<div class="container">
@@ -35,10 +39,18 @@
 	<div class="row">
 		<div class="container">
 			<div class="col-md-6 ">
-				<div class="panel panel-default text-center ans ans0"></div>
+				<div class="panel panel-default text-center ans">
+					<div class="answer ans0"></div>
+					<span class="glyphicon glyphicon-ok correct-0"></span>
+					<span class="glyphicon glyphicon-remove incorrect-0"></span>
+				</div>
 			</div>
 			<div class="col-md-6 ">
-				<div class="panel panel-default text-center ans ans1"></div>
+				<div class="panel panel-default text-center ans">
+					<div class="answer ans1"></div>
+					<span class="glyphicon glyphicon-ok correct-1"></span>
+					<span class="glyphicon glyphicon-remove incorrect-1"></span>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -46,10 +58,18 @@
 	<div class="row">
 		<div class="container">
 			<div class="col-md-6">
-				<div class="panel panel-default text-center ans ans2"></div>
+				<div class="panel panel-default text-center ans">
+					<div class="answer ans2"></div>
+					<span class="glyphicon glyphicon-ok correct-2"></span>
+					<span class="glyphicon glyphicon-remove incorrect-2"></span>
+				</div>
 			</div>
 			<div class="col-md-6">
-				<div class="panel panel-default text-center ans ans3"></div>
+				<div class="panel panel-default text-center ans">
+					<div class="answer ans3"></div>
+					<span class="glyphicon glyphicon-ok correct-3"></span>
+					<span class="glyphicon glyphicon-remove incorrect-3"></span>
+				</div>
 			</div>
 		</div>
 	</div>

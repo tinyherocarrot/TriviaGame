@@ -22,14 +22,7 @@
 $(document).ready(function() {
 
 // ------------- variables ---------------
-	var questionBank = [
-		["dummy"],
-		["What is the only manmade object that is observable from the moon?", ["The Great Wall of China", "Stonehenge", "Panama Canal", "Denver International Airport"]],
-		["What is the capital of Australia?", ["Canberra", "Sydney", "Brisbane", "Perth"]],
-		["Who was the 'Mad Monk' of Russian history?", ["Rasputin", "Peter the Great", "Nicolas", "Stalin"]],
-		["What is the largest fish in the ocean?", ["whale shark", "sunfish", "great white shark", "megadolphin"]],
-		["Which artist painted a mustache and goatee on the Mona Lisa?", ["Marcel Duchamp", "Andy Warhol", "Frida Kahlo", "Rene Magritte"]],
-	];
+	var questionBank = [];
 
 	var numCorrect = 0;
 	// var numWrong = 0;
@@ -44,19 +37,33 @@ $(document).ready(function() {
 	// variable for saving the correct answer in each round
 	var savedCorrectAns = "";
 
+	var gameLocked = false;
+	var ansLocked = false;
+
 // ------------- functions ---------------
 	function initialize() {
 		numCorrect = 0
 		// numWrong = 0;
 		count = 0
+
+		questionBank = [
+			["dummy question: ***DONT TOUCH ME***"],
+			["What is the only manmade object that is observable from the moon?", ["The Great Wall of China", "Stonehenge", "Panama Canal", "Denver International Airport"]],
+			["What is the capital of Australia?", ["Canberra", "Sydney", "Brisbane", "Perth"]],
+			["Who was the 'Mad Monk' of Russian history?", ["Rasputin", "Peter the Great", "Nicolas", "Stalin"]],
+			["What is the largest fish in the ocean?", ["whale shark", "sunfish", "great white shark", "megadolphin"]],
+			["Which artist painted a mustache and goatee on the Mona Lisa?", ["Marcel Duchamp", "Andy Warhol", "Frida Kahlo", "Rene Magritte"]],
+		];
+
 		$(".replay-button").hide();
-		$(".start-button").show();
 		$(".ans").show();
+		$(".glyphicon").hide();
 		console.log("initialized!")
 	}
 
 	// Handles displaying question to DOM, and answers randomly to DOM
 	function displayQuestion() {
+		
 
 		$("#question").text(questionBank[count][0]);
 		savedCorrectAns = questionBank[count][1][0];
@@ -71,11 +78,13 @@ $(document).ready(function() {
 			randomAns = questionBank[count][1][randomAnsIndex];
 			
 			//assign random ans to ans div 
-			$(".ans" + i).html(randomAns);
+			$(".ans" + i).text(randomAns);
 			
-			//assign value attr to div, for checking for correct ans on click
-			if (randomAnsIndex === 0) {
+			//assign correct/incorrect value attr to div, for checking for correct ans on click
+			
+			if ((!ansLocked) && (randomAnsIndex === 0)) {   
 				$(".ans" + i).attr("value", "correct");
+				ansLocked = true;
 			} else {
 				$(".ans" + i).attr("value", "incorrect");
 			}
@@ -88,14 +97,37 @@ $(document).ready(function() {
 
 	//displays Correct Ans to DOM
 	function displayCorrectAns() {
+		// Locks game so that answer can't be chosen while displaying the correct ans
+		gameLocked = true;
+		
 		$("#question").text("The correct answer was " + savedCorrectAns);
+		
 		//put 'check' glyphicons on correct answer
 		//put 'x' glyphicons on incorrect answers
-		// setTimeout({},)
+		for (var i = 0; i < 4; i++) {
+			if ($(".ans" + i).attr("value") === "correct") {
+				console.log($(".ans"+i).text() + " is correct")
+				$(".correct-" + i).show();
+
+				//change color to green for a few secs, by adding btn-submit
+				
+
+			} else if ($(".ans" + i).attr("value") === "incorrect") {
+				$(".incorrect-" + i).show();
+			
+				//change color to red for a few secs, by adding btn-danger
+				
+    
+			}
+			
+		}
+		
 	}
 
 	//
 	function startGame() {
+		$(".ans").show();
+
 		//set timeout for displayAns, to be cleared in ans click handler
 		ansTimeoutTimerId = setTimeout(function() {
 			displayCorrectAns();
@@ -111,8 +143,11 @@ $(document).ready(function() {
 
 	//this function ...
 	function nextQuestion() {
+		$(".glyphicon").hide();
 		//increment count
 		count++
+		gameLocked = false;	
+		ansLocked = false;
 
 		// ends the game if count reaches end of questionBank
 		if (count === questionBank.length) {
@@ -137,6 +172,7 @@ $(document).ready(function() {
 
 // ------------- main logic ---------------
 
+	$(".start-button").show();
 	initialize();
 
 	$(".start-button").on("click", function() {
@@ -146,22 +182,34 @@ $(document).ready(function() {
 	});
 
 	$(".ans").on("click", function() {
+		console.log(gameLocked)
+		if (!gameLocked) {
+			
+			clearTimeout(ansTimeoutTimerId);
+			clearInterval(ansIntervalTimerId);
+			clearInterval(questionTimerId);
 
-		clearTimeout(ansTimeoutTimerId);
-		clearInterval(ansIntervalTimerId);
-		clearInterval(questionTimerId);
+			//check ans, update numCorrect
+			if ($(this).children( ".answer" ).attr("value") === "correct") {    // +++++ FIX THIS LINE +++
+				numCorrect++;
+			}
+			displayCorrectAns();
 
-		//check ans, update numCorrect
-		if ($(this).attr("value") === "correct") {
-			numCorrect++;
+			//wait three seconds to continue to next question
+			if (count !== questionBank.length) {
+				setTimeout(function() { startGame(); nextQuestion() }, 3000);
+			}
 		}
-		displayCorrectAns();
-
-		//wait three seconds to continue to next question
-		if (count !== questionBank.length) {
-			setTimeout(function() { startGame(); nextQuestion() }, 3000);
-		}
+		gameLocked = true;
 	});
 
+	$(".replay-button").on("click", function () {
+		initialize();
+
+		startGame(); 
+		nextQuestion();
+		
+		$(".replay-button").hide();
+	})
 
 })

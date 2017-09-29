@@ -1,6 +1,31 @@
+body {
+	background-image: url("../images/circles-and-roundabouts.png");
+}
+button {
+	margin: 20px;
+}
+#question { 
+	font-size: 23px;
+	font-family: 'Nunito', sans-serif;
+}
+.answer {
+	font-size: 18px;
+	font-family: 'Nunito', sans-serif;
+}
+#page-title {
+	font-size: 50px;
+	font-family: 'Nunito', sans-serif;		
+	font-weight: 800;
+}
 .panel {
-	padding: 10px;
+	padding: 20px;
 }
 .ans {
 	cursor: pointer; cursor: hand;
+}
+.glyphicon-ok {
+	color: green;
+}
+.glyphicon-remove {
+	color: red;
 }
