@@ -31,8 +31,12 @@ $(document).ready(function() {
 	];
 	var numCorrect = 0;
 	// var numWrong = 0;
+	// variable for tracking the current question 
 	var count = 0;
+	// variable for saving the setInterval
 	var timerId;
+	// variable for saving the correct answer in each round
+	var savedCorrectAns = "";
 
 // ------------- functions ---------------
 	function initialize() {
@@ -41,13 +45,15 @@ $(document).ready(function() {
 		count = 0
 		$(".replay-button").hide();
 		$(".start-button").show();
+		$(".ans").show();
 		console.log("initialized!")
 	}
+
 	// Handles displaying question and answers to DOM, according to 
 	function displayQuestion() {
 		console.log(questionBank.length)
 		$(".question-box").html(questionBank[count][0]);
-		
+		savedCorrectAns = questionBank[count][1][0];
 		// randomly assign answers (start at index 0) to divs by randomly choosing one, splice it, repeat...
 		for (var i = 0; i < 4; i++) {
 			//get a random index, 0 to 3
@@ -57,7 +63,7 @@ $(document).ready(function() {
 			//assign random ans to ans div 
 			$(".ans" + i).html(randomAns);
 			//assign value attr to div, for checking for correct ans on click
-			if (i === 0) {
+			if (randomAnsIndex === 0) {
 				$(".ans" + i).attr("value", "correct");
 			} else {
 				$(".ans" + i).attr("value", "incorrect");
@@ -66,16 +72,24 @@ $(document).ready(function() {
 			questionBank[count][1].splice(randomAnsIndex, 1);
 		}
 		return;
-		
 	}
 
+	//displays Correct Ans to DOM, with a timeout
+	function displayCorrectAns() {
+		$(".question-box").html("The correct answer was " + savedCorrectAns);
+		//put 'check' glyphicons on correct answer
+		//put 'x' glyphicons on incorrect answers
+		// setTimeout({},)
+	}
+
+	//setInterval call to nextQuestion
 	function startGame() {
 		timerId = setInterval(nextQuestion, 7000);
 	}
 
-	// increments 
+	//this function ...
 	function nextQuestion() {
-		//increment some count?
+		//increment count
 		count++
 
 		// ends the game if count reaches end of questionBank
@@ -93,8 +107,9 @@ $(document).ready(function() {
 	function showFinalPage() {
 		$(".question-box").html("Nice! You got " + numCorrect + " correct out of " + questionBank.length);
 		$(".replay-button").show();
-
+		$(".ans").hide();
 	}
+
 // ------------- main logic ---------------
 
 	initialize();
@@ -110,16 +125,13 @@ $(document).ready(function() {
 		if ($(this).attr("value") === "correct") {
 			numCorrect++;
 		}
-		//display correct ans
-		$(".question-box").html("The correct answer was " );
+		displayCorrectAns();
 
-		//wait five seconds
-		setTimeout(function() { startGame(); }, 5000);
+		//wait five seconds to continue to next question
+		setTimeout(function() { startGame(); nextQuestion() }, 3500);
 		//set interval (call start game?)
 
-	})
-		//Run one-round
-
+	});
 
 
 })

@@ -1,3 +1,6 @@
-.ans:hover {
-	cursor: pointer;
+.panel {
+	padding: 10px;
+}
+.ans {
+	cursor: pointer; cursor: hand;
 }
